@@ -1,4 +1,19 @@
 {
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/mskhurana729/Battleship#readme",
+  "bugs": {
+    "url": "https://github.com/mskhurana729/Battleship/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mskhurana729/Battleship.git"
+  },
+  "license": "MIT",
+  "author": "Manpreet Singh Khurana <mskhurana729@gmail.com>",
+  "type": "commonjs",
+  "main": "babel.config.js",
   "scripts": {
     "start": "webpack serve --open --config webpack.dev.js",
     "clean": "rm -rf dist/",
@@ -8,9 +23,6 @@
     "prepare": "husky",
     "test": "jest",
     "watch": "jest --watch *.js"
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
@@ -36,5 +48,8 @@
     "webpack-merge": "^6.0.1",
     "xml-loader": "^1.2.1",
     "jest": "^30.0.4"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
