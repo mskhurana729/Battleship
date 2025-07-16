@@ -1,4 +1,4 @@
-class Gameboard {
+class GameBoard {
   constructor(size = 10) {
     this.size = size;
     this.coordinates = {};
@@ -13,3 +13,4 @@ class Gameboard {
     }
   }
 }
+module.exports = GameBoard;
