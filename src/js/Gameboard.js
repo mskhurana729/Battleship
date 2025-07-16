@@ -34,12 +34,9 @@ class GameBoard {
   placeShip(ship, startingCoordinate, direction) {
     let length = ship.length;
     let [x, y] = startingCoordinate;
-    console.log(x, y);
 
-    console.log(!this.occupiedCoordinates[[x, y]] && this.coordinates[[x, y]]);
     for (let i = 0; i < length; i++) {
       if (!this.occupiedCoordinates[[x, y]] && this.coordinates[[x, y]]) {
-        console.log("hello from inside");
         this.occupiedCoordinates[[x, y]] = true;
         this.keepTrack[[x, y]] = ship;
         if (direction === "horizontal") {
@@ -51,7 +48,6 @@ class GameBoard {
         return "Please choose available coordinates";
       }
     }
-    console.log(this.keepTrack);
     return this.keepTrack;
   }
 }
