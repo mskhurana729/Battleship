@@ -3,8 +3,11 @@ class GameBoard {
     this.size = size;
     this.coordinates = {};
     this.occupiedCoordinates = {};
+    this.missedShots = {};
     this.keepTrack = {};
     this.createGameBoard();
+    this.ships = [];
+    this.shotsHit = {};
   }
   createGameBoard() {
     let size = this.size;
@@ -31,12 +34,34 @@ class GameBoard {
    *
    *
    */
-  placeShip(ship, startingCoordinate, direction) {
-    let length = ship.length;
+  checkIfAllCoordinatesAreAvailable(length, startingCoordinate, direction) {
+    // lets check first whether or not all coordinates needed to place the ship are available
     let [x, y] = startingCoordinate;
-
+    let areAllCoordinatesAvailable = true;
     for (let i = 0; i < length; i++) {
-      if (!this.occupiedCoordinates[[x, y]] && this.coordinates[[x, y]]) {
+      if (this.occupiedCoordinates[[x, y]] || !this.coordinates[[x, y]]) {
+        areAllCoordinatesAvailable = false;
+      }
+      if (direction === "horizontal") {
+        ++x;
+      } else {
+        ++y;
+      }
+    }
+    return areAllCoordinatesAvailable;
+  }
+  placeShip(ship, startingCoordinate, direction) {
+    let areAllCoordinatesAvailable = this.checkIfAllCoordinatesAreAvailable(
+      ship.length,
+      startingCoordinate,
+      direction,
+    );
+
+    // if and only if all coordinates are available then we will start placing the ship
+    if (areAllCoordinatesAvailable) {
+      this.ships.push(ship);
+      let [x, y] = startingCoordinate;
+      for (let i = 0; i < ship.length; i++) {
         this.occupiedCoordinates[[x, y]] = true;
         this.keepTrack[[x, y]] = ship;
         if (direction === "horizontal") {
@@ -44,11 +69,36 @@ class GameBoard {
         } else {
           ++y;
         }
-      } else {
-        return "Please choose available coordinates";
       }
+    } else {
+      return "Please choose available coordinates";
     }
     return this.keepTrack;
+  }
+  /**
+   * we want to write a function named receiveAttack which takes a coordinate and decide whether it hit a ship or it missed. if it hit a ship it it updates that ship variable isHit.
+   */
+  receiveAttack(coordinates) {
+    if (this.shotsHit[coordinates] || this.missedShots[coordinates]) {
+      return this.keepTrack[coordinates];
+    }
+    if (!this.keepTrack[coordinates]) {
+      this.missedShots[coordinates] = true;
+    } else {
+      this.keepTrack[coordinates].hit();
+      this.shotsHit[coordinates] = true;
+    }
+    return this.keepTrack[coordinates];
+  }
+  areAllShipsSunk() {
+    let allShipsAreSunk = true;
+
+    this.ships.forEach((ship) => {
+      if (!ship.haveSunk) {
+        allShipsAreSunk = false;
+      }
+    });
+    return allShipsAreSunk;
   }
 }
 module.exports = GameBoard;
