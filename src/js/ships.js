@@ -15,4 +15,11 @@ class Ship {
     return this.haveSunk;
   }
 }
-module.exports = Ship;
+function createShipsInstances(length = 5) {
+  let shipsArr = [];
+  for (let i = 1; i <= length; i++) {
+    shipsArr.push(new Ship(i));
+  }
+  return shipsArr;
+}
+module.exports = { Ship, createShipsInstances };
