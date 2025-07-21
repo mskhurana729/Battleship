@@ -4,3 +4,4 @@ class Player {
     this.gameBoard = new GameBoard();
   }
 }
+export { Player };
