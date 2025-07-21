@@ -12,7 +12,6 @@
   },
   "license": "MIT",
   "author": "Manpreet Singh Khurana <mskhurana729@gmail.com>",
-  "type": "commonjs",
   "main": "babel.config.js",
   "scripts": {
     "start": "webpack serve --open --config webpack.dev.js",
