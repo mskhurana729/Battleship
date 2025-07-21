@@ -36,16 +36,20 @@ class GameBoard {
    */
   checkIfAllCoordinatesAreAvailable(length, startingCoordinate, direction) {
     // lets check first whether or not all coordinates needed to place the ship are available
-    let [x, y] = startingCoordinate;
+    let arr = startingCoordinate.split(",");
+
+    let [x, y] = arr;
     let areAllCoordinatesAvailable = true;
     for (let i = 0; i < length; i++) {
       if (this.occupiedCoordinates[[x, y]] || !this.coordinates[[x, y]]) {
+        console.log(x, y);
         areAllCoordinatesAvailable = false;
+        break;
       }
       if (direction === "horizontal") {
-        ++x;
-      } else {
         ++y;
+      } else {
+        ++x;
       }
     }
     return areAllCoordinatesAvailable;
@@ -56,24 +60,30 @@ class GameBoard {
       startingCoordinate,
       direction,
     );
-
+    console.log(areAllCoordinatesAvailable);
     // if and only if all coordinates are available then we will start placing the ship
     if (areAllCoordinatesAvailable) {
       this.ships.push(ship);
-      let [x, y] = startingCoordinate;
+      let arr = startingCoordinate.split(",");
+      let [x, y] = arr;
       for (let i = 0; i < ship.length; i++) {
         this.occupiedCoordinates[[x, y]] = true;
         this.keepTrack[[x, y]] = ship;
+        this.changeBgOfCell(x, y);
         if (direction === "horizontal") {
-          ++x;
-        } else {
           ++y;
+        } else {
+          ++x;
         }
       }
     } else {
       return "Please choose available coordinates";
     }
     return this.keepTrack;
+  }
+  changeBgOfCell(x, y) {
+    const cell = document.querySelector(`.row${x}column${y}`);
+    cell.classList.toggle("blackBg");
   }
   /**
    * we want to write a function named receiveAttack which takes a coordinate and decide whether it hit a ship or it missed. if it hit a ship it it updates that ship variable isHit.
