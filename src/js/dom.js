@@ -1,3 +1,5 @@
+import { Ship, createShipsInstances } from "./ships.js";
+import { Player } from "./player.js";
 // so what do we want to do ?
 /**we want to make a game named battle ship
  * in which 2 player plays, second player can either be  a actual player or a computer
@@ -13,6 +15,8 @@
 // first we want to create a grid for the game board
 
 const container = document.querySelector(".container");
+let shipsArr = createShipsInstances();
+const player1 = new Player();
 function createGridForGameBoard() {
   const gameBoardContainer = document.createElement("div");
   for (let i = 0; i < 10; i++) {
@@ -20,7 +24,7 @@ function createGridForGameBoard() {
     row.classList.add("row", `row${i}`);
     for (let j = 0; j < 10; j++) {
       let column = document.createElement("div");
-      column.classList.add("column", `column${j}`, `[${i},${j}]`);
+      column.classList.add("column", `row${i}column${j}`, `[${i},${j}]`);
       column.setAttribute("data-coordinates", `${i},${j}`);
       row.appendChild(column);
     }
@@ -36,23 +40,45 @@ function createHorizontalOrVerticalButton() {
     "button",
     "btn",
   );
-  horizontalOrVerticalButton.textContent = "Vertical";
-  container.appendChild(horizontalOrVerticalButton);
+  horizontalOrVerticalButton.setAttribute("data-direction", "horizontal");
+  horizontalOrVerticalButton.textContent = "Place Vertically";
+  return horizontalOrVerticalButton;
 }
 function createShipInfoContainer() {
   const shipInfoContainer = document.createElement("div");
   shipInfoContainer.classList.add("sipInfoContainer");
-  shipInfoContainer.textContent = "Ship Length: ";
+
+  let para1 = document.createElement("p");
+  para1.classList.add("para", "para1");
+  para1.textContent = `Please Choose direction before clicking on a coordinate for placing the ship:`;
+
+  let para2 = document.createElement("p");
+  para2.classList.add("para", "para2");
+  para2.textContent = `Ship length: ${shipsArr[shipsArr.length - 1].length}`;
+
+  let horizontalOrVerticalButton = createHorizontalOrVerticalButton();
+
+  shipInfoContainer.appendChild(para1);
+  shipInfoContainer.appendChild(para2);
+  shipInfoContainer.appendChild(horizontalOrVerticalButton);
   container.appendChild(shipInfoContainer);
 }
 function activateEventListenerForGameBoard() {
   const columns = document.querySelectorAll(".column");
   columns.forEach((column) => {
     column.addEventListener("click", (e) => {
+      console.log(e.target);
       console.log(e.target.dataset.coordinates);
+      let coordinates = e.target.dataset.coordinates;
+      let direction = document.querySelector(".horizontalOrVerticalButton")
+        .dataset.direction;
+      let ship = shipsArr[shipsArr.length - 1];
+      player1.gameBoard.placeShip(ship, coordinates, direction);
+      console.log(player1.gameBoard.keepTrack);
     });
   });
 }
+
 // now we want to place the ships on game board
 // to do this we need to use placeShip method of GameBoard class
 /**and place ship method takes
@@ -69,7 +95,7 @@ function activateEventListenerForGameBoard() {
  * 3. direction
  * we will get this from player too, but for default we will set it to horizontal and will change when ever the button is clicked
  */
-module.exports = {
+export {
   createGridForGameBoard,
   createHorizontalOrVerticalButton,
   createShipInfoContainer,
