@@ -48,11 +48,14 @@ function createHorizontalOrVerticalButton() {
 function checkIfShipInfoContainerIsAlreadyInitialized() {
   if (document.querySelector(".shipInfoContainer")) {
     let shipInfoContainer = document.querySelector(".shipInfoContainer");
-    container.removeChild(shipInfoContainer);
+    console.log("Hello");
+    removeAllChildNodes(shipInfoContainer);
+    console.log(shipInfoContainer);
+
     return shipInfoContainer;
   }
   const shipInfoContainer = document.createElement("div");
-  shipInfoContainer.classList.add("sipInfoContainer");
+  shipInfoContainer.classList.add("shipInfoContainer");
   return shipInfoContainer;
 }
 function removeAllChildNodes(parent) {
@@ -63,7 +66,11 @@ function removeAllChildNodes(parent) {
 
 function createShipInfoContainer() {
   let shipInfoContainer = checkIfShipInfoContainerIsAlreadyInitialized();
-  removeAllChildNodes(shipInfoContainer);
+  if (shipsArr.length < 1) {
+    // removeShipInfoContainer(shipInfoContainer);
+    removeAllChildNodes(shipInfoContainer);
+    return;
+  }
 
   let para1 = document.createElement("p");
   para1.classList.add("para", "para1");
@@ -86,16 +93,17 @@ function activateEventListenerForGameBoard() {
     column.addEventListener("click", (e) => {
       console.log(e.target);
       console.log(e.target.dataset.coordinates);
-      let coordinates = e.target.dataset.coordinates;
-      let direction = document.querySelector(".horizontalOrVerticalButton")
-        .dataset.direction;
       if (shipsArr.length > 0) {
+        let coordinates = e.target.dataset.coordinates;
+        let direction = document.querySelector(".horizontalOrVerticalButton")
+          .dataset.direction;
+
         let ship = shipsArr[shipsArr.length - 1];
         player1.gameBoard.placeShip(ship, coordinates, direction, shipsArr);
       }
-      if (shipsArr.length > 0) {
-        createShipInfoContainer();
-      }
+
+      createShipInfoContainer();
+
       console.log(player1.gameBoard.keepTrack);
     });
   });
