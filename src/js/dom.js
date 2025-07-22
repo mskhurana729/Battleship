@@ -1,5 +1,6 @@
 import { Ship, createShipsInstances } from "./ships.js";
 import { Player } from "./player.js";
+
 // so what do we want to do ?
 /**we want to make a game named battle ship
  * in which 2 player plays, second player can either be  a actual player or a computer
@@ -44,9 +45,25 @@ function createHorizontalOrVerticalButton() {
   horizontalOrVerticalButton.textContent = "Place Vertically";
   return horizontalOrVerticalButton;
 }
-function createShipInfoContainer() {
+function checkIfShipInfoContainerIsAlreadyInitialized() {
+  if (document.querySelector(".shipInfoContainer")) {
+    let shipInfoContainer = document.querySelector(".shipInfoContainer");
+    container.removeChild(shipInfoContainer);
+    return shipInfoContainer;
+  }
   const shipInfoContainer = document.createElement("div");
   shipInfoContainer.classList.add("sipInfoContainer");
+  return shipInfoContainer;
+}
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
+function createShipInfoContainer() {
+  let shipInfoContainer = checkIfShipInfoContainerIsAlreadyInitialized();
+  removeAllChildNodes(shipInfoContainer);
 
   let para1 = document.createElement("p");
   para1.classList.add("para", "para1");
@@ -72,8 +89,13 @@ function activateEventListenerForGameBoard() {
       let coordinates = e.target.dataset.coordinates;
       let direction = document.querySelector(".horizontalOrVerticalButton")
         .dataset.direction;
-      let ship = shipsArr[shipsArr.length - 1];
-      player1.gameBoard.placeShip(ship, coordinates, direction);
+      if (shipsArr.length > 0) {
+        let ship = shipsArr[shipsArr.length - 1];
+        player1.gameBoard.placeShip(ship, coordinates, direction, shipsArr);
+      }
+      if (shipsArr.length > 0) {
+        createShipInfoContainer();
+      }
       console.log(player1.gameBoard.keepTrack);
     });
   });
