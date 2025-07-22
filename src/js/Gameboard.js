@@ -54,7 +54,7 @@ class GameBoard {
     }
     return areAllCoordinatesAvailable;
   }
-  placeShip(ship, startingCoordinate, direction) {
+  placeShip(ship, startingCoordinate, direction, shipsArr) {
     let areAllCoordinatesAvailable = this.checkIfAllCoordinatesAreAvailable(
       ship.length,
       startingCoordinate,
@@ -70,12 +70,15 @@ class GameBoard {
         this.occupiedCoordinates[[x, y]] = true;
         this.keepTrack[[x, y]] = ship;
         this.changeBgOfCell(x, y);
+
         if (direction === "horizontal") {
           ++y;
         } else {
           ++x;
         }
       }
+      shipsArr.pop();
+      console.log(shipsArr);
     } else {
       return "Please choose available coordinates";
     }
